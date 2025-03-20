@@ -63,8 +63,14 @@ public class ParcelaController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro: Parcela não encontrada!");
 		}
 		
+		// Recupera o ID da conta antes de deletar a parcela
+		ParcelaModel parcela = parcelaRepository.findById(id).orElseThrow();
+		Long idConta = parcela.getIdcontas().getIdcontas();
+		
 		parcelaRepository.deleteById(id);
-		return ResponseEntity.ok("Parcela deletada com sucesso!");
+		
+		// Retorna o ID da conta junto com a mensagem de sucesso
+		return ResponseEntity.ok(idConta);
 	}
 
 }
