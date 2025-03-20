@@ -13,11 +13,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.ifba.demo.backend.api.dto.ContasDTO;
+import br.edu.ifba.demo.backend.api.model.CategoriaModel;
 import br.edu.ifba.demo.backend.api.model.ContasModel;
+import br.edu.ifba.demo.backend.api.repository.CategoriaRepository;
 import br.edu.ifba.demo.backend.api.repository.ContasRepository;
+import br.edu.ifba.demo.backend.api.repository.UsuarioRepository;
 
 @RestController
 @RequestMapping("/contas")
@@ -25,9 +30,15 @@ public class ContasController {
     
     @Autowired
     private ContasRepository contasRepository;
+	@Autowired
+	private UsuarioRepository usuarioRepository;
+	@Autowired
+	private CategoriaRepository categoriaRepository;
 
-    public ContasController(ContasRepository contasRepository){
+    public ContasController(ContasRepository contasRepository, UsuarioRepository usuarioRepository, CategoriaRepository categoriaRepository){
         this.contasRepository = contasRepository;
+		this.usuarioRepository = usuarioRepository;
+		this.categoriaRepository = categoriaRepository;
     }
 
     @GetMapping
@@ -119,5 +130,39 @@ public class ContasController {
 		}
 	}
 
+	@PostMapping("/criar")
+public ResponseEntity<?> criarConta(@RequestBody ContasDTO contasDTO, 
+                                    @RequestHeader("Usuario-ID") Long usuarioId) {
+    try {
+        // Busca o usuário no banco de dados
+        var usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        // Busca a categoria existente (se fornecida)
+        CategoriaModel categoria = null;
+        if (contasDTO.getIdcategoria() != null) {
+            categoria = categoriaRepository.findById(contasDTO.getIdcategoria())
+                    .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+        }
+
+        // Converte o DTO para o modelo
+        ContasModel contas = new ContasModel();
+        contas.setDescricao(contasDTO.getDescricao());
+        contas.setValor(contasDTO.getValor());
+        contas.setDatavencimento(contasDTO.getDatavencimento());
+        contas.setDatapagamento(contasDTO.getDatapagamento());
+        contas.setTipoconta(contasDTO.getTipoconta());
+        contas.setStatuscontas(contasDTO.isStatuscontas());
+        contas.setIdusuario(usuario);
+        contas.setIdcategoria(categoria); // Associa a categoria (se existir)
+
+        // Salva a conta no banco de dados
+        ContasModel savedContas = contasRepository.save(contas);
+
+        return new ResponseEntity<>(savedContas, HttpStatus.CREATED);
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao criar conta: " + e.getMessage());
+    }
+}
 
 }

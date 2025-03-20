@@ -18,6 +18,7 @@ public class ContasDTO {
     private String tipoconta;
     private boolean statuscontas;
     private Long idusuario;
+    private Long idcategoria;
     private String categoriadescricao;
     private String tipo;
 
@@ -33,6 +34,7 @@ public class ContasDTO {
         contas.setIdusuario(contasModel.getIdusuario().getIdusuario());
 
         if(contasModel.getIdcategoria()!=null){
+        contas.setIdcategoria(contasModel.getIdcategoria().getIdcategoria());
         contas.setCategoriadescricao(contasModel.getIdcategoria().getCategoriadescricao());
         contas.setTipo(contasModel.getIdcategoria().getTipo());
         }
@@ -53,7 +55,7 @@ public class ContasDTO {
     }
 
     public ContasDTO(long idcontas, String descricao, float valor, LocalDate  datavencimento, LocalDate  datapagamento, String tipoconta, boolean statuscontas, Long idusuario, 
-    String categoriadescricao, String tipo){
+    Long idcategoria, String categoriadescricao, String tipo){
         super();
         this.idcontas = idcontas;
         this.descricao = descricao;
@@ -63,6 +65,7 @@ public class ContasDTO {
         this.tipoconta = tipoconta;
         this.statuscontas = statuscontas;
         this.idusuario = idusuario;
+        this.idcategoria = idcategoria;
         this.categoriadescricao = categoriadescricao;
         this.tipo = tipo;
     }
