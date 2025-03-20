@@ -105,7 +105,6 @@ public class UsuarioController {
 	@PostMapping("/criar")
 	public ResponseEntity<?> criarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
 		try {
-			// Validação: Verifica se já existe um usuário com o mesmo e-mail ou CPF
 			if (usuRepository.existsByEmail(usuarioDTO.getEmail())) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro: Já existe um usuário cadastrado com este e-mail.");
 			}
@@ -113,7 +112,6 @@ public class UsuarioController {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro: Já existe um usuário cadastrado com este CPF.");
 			}
 
-			// Criando endereço
 			EnderecoModel endereco = new EnderecoModel();
 			endereco.setEstado(usuarioDTO.getEstado());
 			endereco.setCidade(usuarioDTO.getCidade());
@@ -122,16 +120,13 @@ public class UsuarioController {
 			endereco.setNumero(usuarioDTO.getNumero());
 			endereco.setCep(usuarioDTO.getCep());
 
-			// Criando telefone
 			TelefoneModel telefone = new TelefoneModel();
 			telefone.setTelefonenumero(usuarioDTO.getTelefonenumero());
 			telefone.setTiponumero(usuarioDTO.getTiponumero());
 
-			// Salvando endereço e telefone primeiro
 			enderecoRepository.save(endereco);
 			telefoneRepository.save(telefone);
 
-			// Criando usuário
 			UsuarioModel usuario = new UsuarioModel();
 			usuario.setNome(usuarioDTO.getNome());
 			usuario.setCpf(usuarioDTO.getCpf());
@@ -141,7 +136,6 @@ public class UsuarioController {
 			usuario.setIdendereco(endereco);
 			usuario.setIdtelefone(telefone);
 
-			// Salvando usuário no banco
 			UsuarioModel usuarioSalvo = usuRepository.save(usuario);
 
 			return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioDTO.converter(usuarioSalvo));
@@ -160,7 +154,6 @@ public class UsuarioController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro: Usuário não encontrado.");
 		}
 
-		// Garantindo que Endereço e Telefone sejam salvos antes
 		if (usuario.getIdendereco() != null) {
 			EnderecoModel endereco = usuario.getIdendereco();
 			endereco = enderecoRepository.save(endereco);
@@ -168,8 +161,6 @@ public class UsuarioController {
 		}
 
 		if (usuario.getIdtelefone() != null) {
-			// Criar um repositório para telefone e salvar
-			// telefoneRepository.save(usuario.getIdtelefone());
 		}
 
 		UsuarioModel savedUsuario = usuRepository.save(usuario);

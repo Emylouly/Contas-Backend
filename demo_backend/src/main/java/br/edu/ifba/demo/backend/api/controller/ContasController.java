@@ -134,18 +134,15 @@ public class ContasController {
 public ResponseEntity<?> criarConta(@RequestBody ContasDTO contasDTO, 
                                     @RequestHeader("Usuario-ID") Long usuarioId) {
     try {
-        // Busca o usuário no banco de dados
         var usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        // Busca a categoria existente (se fornecida)
         CategoriaModel categoria = null;
         if (contasDTO.getIdcategoria() != null) {
             categoria = categoriaRepository.findById(contasDTO.getIdcategoria())
                     .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
         }
 
-        // Converte o DTO para o modelo
         ContasModel contas = new ContasModel();
         contas.setDescricao(contasDTO.getDescricao());
         contas.setValor(contasDTO.getValor());
@@ -154,9 +151,8 @@ public ResponseEntity<?> criarConta(@RequestBody ContasDTO contasDTO,
         contas.setTipoconta(contasDTO.getTipoconta());
         contas.setStatuscontas(contasDTO.isStatuscontas());
         contas.setIdusuario(usuario);
-        contas.setIdcategoria(categoria); // Associa a categoria (se existir)
+        contas.setIdcategoria(categoria);
 
-        // Salva a conta no banco de dados
         ContasModel savedContas = contasRepository.save(contas);
 
         return new ResponseEntity<>(savedContas, HttpStatus.CREATED);
