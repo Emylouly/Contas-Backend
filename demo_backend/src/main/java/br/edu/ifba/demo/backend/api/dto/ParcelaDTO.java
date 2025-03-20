@@ -14,11 +14,11 @@ public class ParcelaDTO {
     private LocalDate parceladatavencimento;
     private int numeroparcela;
     private double valorparcela;
-    private Long idcontas;
     private String descricao;
     private float valor;
     private LocalDate  datavencimento;
     private LocalDate datapagamento;
+    private Long idcontas;
     private String tipoconta;
     private boolean statuscontas;
 
@@ -32,6 +32,7 @@ public class ParcelaDTO {
         parcela.setValor(parcelaModel.getIdcontas().getValor());
         parcela.setDatapagamento(parcelaModel.getIdcontas().getDatapagamento());
         parcela.setDatavencimento(parcelaModel.getIdcontas().getDatavencimento());
+        parcela.setIdcontas(parcelaModel.getIdcontas().getIdcontas());
         parcela.setTipoconta(parcelaModel.getIdcontas().getTipoconta());
         parcela.setStatuscontas(parcelaModel.getIdcontas().isStatuscontas());
         return parcela;

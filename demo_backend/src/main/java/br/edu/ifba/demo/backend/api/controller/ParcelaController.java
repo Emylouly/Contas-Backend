@@ -46,9 +46,9 @@ public class ParcelaController {
 	}
 
 	@GetMapping("/buscarporconta/{idconta}")
-    public ResponseEntity<List<ParcelaModel>> findByIdcontas_Idcontas(@PathVariable Long  idconta) {
+	public ResponseEntity<List<ParcelaModel>> findByIdcontas_Idcontas(@PathVariable Long idconta) {
 		List<ParcelaModel> parcela = parcelaRepository.findByIdcontas_Idcontas(idconta);
-        return ResponseEntity.ok(parcela);
+		return ResponseEntity.ok(parcela);
 	}
 
 	@PostMapping("/salvar")
