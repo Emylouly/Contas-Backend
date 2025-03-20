@@ -88,7 +88,7 @@ public class ContasController {
 
 	@GetMapping("/buscarporidusuario/{idusuario}")
     public ResponseEntity<List<ContasModel>> buscarPorUsuario(@PathVariable Long idusuario) {
-        List<ContasModel> contas = contasRepository.findByIdusuarioIdusuario(idusuario);
+        List<ContasModel> contas = contasRepository.findByIdusuario_Idusuario(idusuario);
         return ResponseEntity.ok(contas);
     }
 

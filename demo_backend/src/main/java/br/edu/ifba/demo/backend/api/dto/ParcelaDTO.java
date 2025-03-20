@@ -22,19 +22,13 @@ public class ParcelaDTO {
     private String tipoconta;
     private boolean statuscontas;
 
-    public static ParcelaDTO converter(ParcelaModel parcelaModel){
+    public static ParcelaDTO converter(ParcelaModel parcelaModel) {
         var parcela = new ParcelaDTO();
         parcela.setIdparcela(parcelaModel.getIdparcela());
-        parcela.setParceladatavencimento(parcelaModel.getParceladatavencimento());
+        parcela.setParceladatavencimento(parcelaModel.getParceladatavencimento()); // Certifique-se de que está correto
         parcela.setNumeroparcela(parcelaModel.getNumeroparcela());
         parcela.setValorparcela(parcelaModel.getValorparcela());
-        parcela.setDescricao(parcelaModel.getIdcontas().getDescricao());
-        parcela.setValor(parcelaModel.getIdcontas().getValor());
-        parcela.setDatapagamento(parcelaModel.getIdcontas().getDatapagamento());
-        parcela.setDatavencimento(parcelaModel.getIdcontas().getDatavencimento());
-        parcela.setIdcontas(parcelaModel.getIdcontas().getIdcontas());
-        parcela.setTipoconta(parcelaModel.getIdcontas().getTipoconta());
-        parcela.setStatuscontas(parcelaModel.getIdcontas().isStatuscontas());
+        // Outros mapeamentos...
         return parcela;
     }
 
