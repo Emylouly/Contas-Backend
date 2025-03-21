@@ -13,12 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.edu.ifba.demo.backend.api.dto.ContasDTO;
-import br.edu.ifba.demo.backend.api.model.CategoriaModel;
 import br.edu.ifba.demo.backend.api.model.ContasModel;
 import br.edu.ifba.demo.backend.api.repository.CategoriaRepository;
 import br.edu.ifba.demo.backend.api.repository.ContasRepository;
@@ -127,37 +124,6 @@ public class ContasController {
 			System.err.println("Erro ao excluir: " + e.getMessage());
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body("Não é possível excluir a conta, pois há parcelas vinculadas a ela.");
-		}
-	}
-
-	@PostMapping("/criar")
-	public ResponseEntity<?> criarConta(@RequestBody ContasDTO contasDTO, 
-										@RequestHeader("Usuario-ID") Long usuarioId) {
-		try {
-			var usuario = usuarioRepository.findById(usuarioId)
-					.orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
-			CategoriaModel categoria = null;
-			if (contasDTO.getIdcategoria() != null) {
-				categoria = categoriaRepository.findById(contasDTO.getIdcategoria())
-						.orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
-			}
-
-			ContasModel contas = new ContasModel();
-			contas.setDescricao(contasDTO.getDescricao());
-			contas.setValor(contasDTO.getValor());
-			contas.setDatavencimento(contasDTO.getDatavencimento());
-			contas.setDatapagamento(contasDTO.getDatapagamento());
-			contas.setTipoconta(contasDTO.getTipoconta());
-			contas.setStatuscontas(contasDTO.isStatuscontas());
-			contas.setIdusuario(usuario);
-			contas.setIdcategoria(categoria);
-
-			ContasModel savedContas = contasRepository.save(contas);
-
-			return new ResponseEntity<>(savedContas, HttpStatus.CREATED);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao criar conta: " + e.getMessage());
 		}
 	}
 
