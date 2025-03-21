@@ -131,34 +131,34 @@ public class ContasController {
 	}
 
 	@PostMapping("/criar")
-public ResponseEntity<?> criarConta(@RequestBody ContasDTO contasDTO, 
-                                    @RequestHeader("Usuario-ID") Long usuarioId) {
-    try {
-        var usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+	public ResponseEntity<?> criarConta(@RequestBody ContasDTO contasDTO, 
+										@RequestHeader("Usuario-ID") Long usuarioId) {
+		try {
+			var usuario = usuarioRepository.findById(usuarioId)
+					.orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        CategoriaModel categoria = null;
-        if (contasDTO.getIdcategoria() != null) {
-            categoria = categoriaRepository.findById(contasDTO.getIdcategoria())
-                    .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
-        }
+			CategoriaModel categoria = null;
+			if (contasDTO.getIdcategoria() != null) {
+				categoria = categoriaRepository.findById(contasDTO.getIdcategoria())
+						.orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+			}
 
-        ContasModel contas = new ContasModel();
-        contas.setDescricao(contasDTO.getDescricao());
-        contas.setValor(contasDTO.getValor());
-        contas.setDatavencimento(contasDTO.getDatavencimento());
-        contas.setDatapagamento(contasDTO.getDatapagamento());
-        contas.setTipoconta(contasDTO.getTipoconta());
-        contas.setStatuscontas(contasDTO.isStatuscontas());
-        contas.setIdusuario(usuario);
-        contas.setIdcategoria(categoria);
+			ContasModel contas = new ContasModel();
+			contas.setDescricao(contasDTO.getDescricao());
+			contas.setValor(contasDTO.getValor());
+			contas.setDatavencimento(contasDTO.getDatavencimento());
+			contas.setDatapagamento(contasDTO.getDatapagamento());
+			contas.setTipoconta(contasDTO.getTipoconta());
+			contas.setStatuscontas(contasDTO.isStatuscontas());
+			contas.setIdusuario(usuario);
+			contas.setIdcategoria(categoria);
 
-        ContasModel savedContas = contasRepository.save(contas);
+			ContasModel savedContas = contasRepository.save(contas);
 
-        return new ResponseEntity<>(savedContas, HttpStatus.CREATED);
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao criar conta: " + e.getMessage());
-    }
-}
+			return new ResponseEntity<>(savedContas, HttpStatus.CREATED);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao criar conta: " + e.getMessage());
+		}
+	}
 
 }
