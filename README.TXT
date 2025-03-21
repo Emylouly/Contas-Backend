@@ -144,3 +144,4 @@ INSERT INTO parcela (data_vencimento, numero_parcela, valor_parcela, idcontas) V
 ('2025-03-12', 1, 200.00, 6);
 
 #('2025-03-30', 1, 3500.00, 7)
+
