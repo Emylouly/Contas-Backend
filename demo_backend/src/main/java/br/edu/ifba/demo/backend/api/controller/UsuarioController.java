@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -146,7 +147,7 @@ public class UsuarioController {
 	}
 
 
-	@PostMapping("/salvar")
+	@PutMapping("/salvar")
 	public ResponseEntity<?> atualizarUsuario(@RequestBody UsuarioModel usuario) {
 		System.out.println("Recebido: " + usuario);
 		
@@ -161,6 +162,9 @@ public class UsuarioController {
 		}
 
 		if (usuario.getIdtelefone() != null) {
+			TelefoneModel telefone = usuario.getIdtelefone();
+			telefone = telefoneRepository.save(telefone);
+			usuario.setIdtelefone(telefone);
 		}
 
 		UsuarioModel savedUsuario = usuRepository.save(usuario);
@@ -195,6 +199,17 @@ public class UsuarioController {
 		}
 		
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"erro\": \"Login ou senha inválidos\"}");
+	}
+
+	@GetMapping("/editar/{id}")
+	public ResponseEntity<UsuarioDTO> editarUsuario(@PathVariable Long id) {
+		Optional<UsuarioModel> usuarioOpt = usuRepository.findById(id);
+		if (usuarioOpt.isPresent()) {
+			UsuarioModel usuario = usuarioOpt.get();
+			UsuarioDTO usuarioDTO = UsuarioDTO.converter(usuario);
+			return ResponseEntity.ok(usuarioDTO);
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 	}
 
 }
